@@ -21,7 +21,6 @@ import java.sql.Date;
 public class CompetitionController {
     private final CompetitionServiceImpl competitionService;
     private final CompetitionRepository competitionRepository;
-    private final ModelMapper modelMapper;
 
     @PostMapping("create")
     public ResponseEntity<CustomResponse<CompetitionDTO, String>> createCompetition
@@ -36,10 +35,8 @@ public class CompetitionController {
             return new ResponseEntity<>(new CustomResponse<>("competition successfully stored ", storedCompetitionDTO), HttpStatus.CREATED);
 
         }catch (CompetitionAlreadyExistsException ex){
-            ex.printStackTrace();
             throw ex;
         }catch (Exception ex){
-            ex.printStackTrace();
             throw ex;
         }
 

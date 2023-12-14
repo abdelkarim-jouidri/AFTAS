@@ -6,6 +6,7 @@ import com.example.aftas.Entities.Models.Competition;
 import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
 import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Services.CompetitionService;
+import com.example.aftas.Utils.CompetitionCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -31,9 +32,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         if(competitionRepository.existsByDate(date))
             throw new CompetitionAlreadyExistsException(date);
         Competition competitionEntity = modelMapper.map(competitionDTO, Competition.class);
-        String locationCode = competitionEntity.getLocation().substring(0, Math.min(competitionEntity.getLocation().length(), 3));
-        String dateCode = competitionEntity.getDate().toLocalDate().format(DateTimeFormatter.ofPattern("yy-MM-dd"));
-        String code = locationCode.toLowerCase()+"-"+dateCode;
+        String code = CompetitionCodeGenerator.generateCode(competitionEntity.getLocation(), competitionEntity.getDate());
         competitionEntity.setCode(code);
         Competition savedCompetition = competitionRepository.save(competitionEntity);
         if(savedCompetition==null){
