@@ -11,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor @AllArgsConstructor @Setter @Getter
 @Builder
 public class Competition {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String code;
 
     private Date date;
