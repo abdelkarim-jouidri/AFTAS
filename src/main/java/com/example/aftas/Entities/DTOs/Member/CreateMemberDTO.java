@@ -1,28 +1,35 @@
 package com.example.aftas.Entities.DTOs.Member;
 
-import com.example.aftas.Entities.DTOs.Hunting.HuntingDTO;
-import com.example.aftas.Entities.DTOs.Ranking.RankingDTO;
 import com.example.aftas.Enums.IdentityDocumentType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberDTO {
-    private Integer num;
+public class CreateMemberDTO {
+    @NotBlank(message = "First name is required")
     private String firstname;
+
+    @NotBlank(message = "Last name is required")
     private String lastname;
+
+    @NotNull(message = "Joining date cannot be null")
     private Date joiningDate;
+
+    @NotBlank(message = "Nationality is required")
     private String nationality;
+
+    @NotNull(message = "Identity document type cannot be null")
     private IdentityDocumentType identityDocumentType;
+
+    @NotBlank(message = "Identity number is required")
     private String identityNumber;
-    private Set<RankingDTO> rankings;
-    private Set<HuntingDTO> huntings;
 }

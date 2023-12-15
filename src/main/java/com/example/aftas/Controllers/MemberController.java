@@ -1,15 +1,47 @@
 package com.example.aftas.Controllers;
 
+import com.example.aftas.Entities.DTOs.Member.CreateMemberDTO;
+import com.example.aftas.Entities.DTOs.Member.MemberDTO;
+import com.example.aftas.Entities.DTOs.Response.CustomResponse;
 import com.example.aftas.Services.MemberService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RestControllerAdvice
 @RequestMapping("api/members/")
 @AllArgsConstructor
 public class MemberController {
     @Qualifier("memberServiceImpl")
     private final MemberService memberService;
+
+    @GetMapping("/all")
+    public ResponseEntity<CustomResponse<List<MemberDTO>, String>> getAllMembers(){
+        try{
+            List<MemberDTO> allMembers = memberService.findAll();
+            CustomResponse<List<MemberDTO>, String> response = new CustomResponse<>("All members", allMembers);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CustomResponse<MemberDTO, String>> AddMember(@Valid @RequestBody CreateMemberDTO memberDTO){
+        try {
+            MemberDTO storedMemberDTO = memberService.createMember(memberDTO);
+            CustomResponse<MemberDTO, String> response = new CustomResponse<>("Member successfully added ", storedMemberDTO);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
 }

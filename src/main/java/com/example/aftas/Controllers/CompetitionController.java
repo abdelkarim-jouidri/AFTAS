@@ -8,6 +8,7 @@ import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
 import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Services.CompetitionService;
 import com.example.aftas.Services.Implementations.CompetitionServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,15 +32,14 @@ public class CompetitionController {
     @PostMapping("create")
     public ResponseEntity<CustomResponse<CompetitionDTO, String>> createCompetition
             (
-            @RequestBody CreateCompetitionDTO competitionDTO
+            @Valid  @RequestBody CreateCompetitionDTO competitionDTO
             )
 
     {
         try {
-
             CompetitionDTO storedCompetitionDTO = competitionService.StoreCompetition(competitionDTO);
-            return new ResponseEntity<>(new CustomResponse<>("competition successfully stored ", storedCompetitionDTO), HttpStatus.CREATED);
-
+            String msg = "competition successfully stored ";
+            return new ResponseEntity<>(new CustomResponse<>(msg, storedCompetitionDTO), HttpStatus.CREATED);
         }catch (CompetitionAlreadyExistsException ex){
             throw ex;
         }catch (Exception ex){

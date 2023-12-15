@@ -1,5 +1,6 @@
 package com.example.aftas.Entities.DTOs.Competition;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.sql.Time;
 @AllArgsConstructor @NoArgsConstructor
 public class CreateCompetitionDTO {
     @NotNull(message = "date of the competition cannot be empty")
+    @Future(message = "input date shouldn't be before today's date")
     private Date date;
 
     @NotNull(message = "Start time is required")
