@@ -2,14 +2,16 @@ package com.example.aftas.Controllers;
 
 import com.example.aftas.Entities.DTOs.Member.CreateMemberDTO;
 import com.example.aftas.Entities.DTOs.Member.MemberDTO;
+import com.example.aftas.Entities.DTOs.Ranking.RankingDTO;
 import com.example.aftas.Entities.DTOs.Response.CustomResponse;
+import com.example.aftas.Exceptions.CompetitionRegistrationException;
 import com.example.aftas.Services.MemberService;
+import com.example.aftas.Services.RankingService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.List;
 public class MemberController {
     @Qualifier("memberServiceImpl")
     private final MemberService memberService;
+
+    private final RankingService rankingService;
 
     @GetMapping("/all")
     public ResponseEntity<CustomResponse<List<MemberDTO>, String>> getAllMembers(){
@@ -41,6 +45,19 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
         catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<CustomResponse<RankingDTO, String>> registerMember(@RequestParam Integer memberNum, @RequestParam String competitionCode){
+        try {
+            RankingDTO registeredRankingDTO = memberService.registerMemberForCompetition(memberNum, competitionCode);
+            CustomResponse<RankingDTO, String> response = new CustomResponse<>("Member successfully registered for the competition", registeredRankingDTO);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (CompetitionRegistrationException ex) {
+            throw ex;
+        } catch (Exception ex) {
             throw ex;
         }
     }

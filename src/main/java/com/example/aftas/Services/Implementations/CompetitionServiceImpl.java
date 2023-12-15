@@ -66,17 +66,18 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public boolean isRegistrationOpen(CompetitionDTO competitionDTO) {
         LocalDateTime currentDateTime = LocalDateTime.now();
-
-        // Combine the competition date and start time
         LocalDateTime competitionStartDateTime = LocalDateTime.of(
                 competitionDTO.getDate().toLocalDate(),
                 competitionDTO.getStartTime().toLocalTime()
         );
 
-        // Calculate the difference in hours between the current time and competition start time
         long hoursUntilStart = ChronoUnit.HOURS.between(currentDateTime, competitionStartDateTime);
 
-        // Return true if registration is allowed (24 hours before the start)
         return hoursUntilStart > 24;
+    }
+
+    @Override
+    public CompetitionDTO findCompetitionByCode(String code) {
+        return modelMapper.map(competitionRepository.findCompetitionByCode(code), CompetitionDTO.class);
     }
 }

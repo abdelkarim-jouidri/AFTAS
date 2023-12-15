@@ -1,8 +1,8 @@
-package com.example.aftas.Entities.DTOs.Ranking;
+package com.example.aftas.Entities.DTOs.Hunting;
 
 import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
+import com.example.aftas.Entities.DTOs.Fish.FishDTO;
 import com.example.aftas.Entities.DTOs.Member.MemberDTO;
-import com.example.aftas.Entities.Models.RankingKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RankingDTO {
-    private RankingKey id;
-    private Integer rank;
-    private Integer score;
+public class CreateHuntingDTO {
+    private Double caughtFishWeight;
+    private int numberOfFishes;
+    private FishDTO fish;
     private MemberDTO member;
-    private CompetitionDTO competition;
-
+    private CompetitionDTO competition; 
 }

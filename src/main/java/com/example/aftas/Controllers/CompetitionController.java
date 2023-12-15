@@ -7,18 +7,14 @@ import com.example.aftas.Enums.Status;
 import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
 import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Services.CompetitionService;
-import com.example.aftas.Services.Implementations.CompetitionServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.util.List;
-import java.util.concurrent.CompletionService;
 
 @RestController
 @RequestMapping("api/competitions/")

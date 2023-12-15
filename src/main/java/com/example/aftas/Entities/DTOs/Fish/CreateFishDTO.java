@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FishDTO {
+public class CreateFishDTO {
     private String name;
     private Double averageWeight;
-    private LevelDTO level; // Assuming you have a LevelDTO class
+    private String levelCode;
 }

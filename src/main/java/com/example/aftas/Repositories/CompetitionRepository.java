@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, String> {
     boolean existsByDate(Date date);
+    Competition findCompetitionByCode(String code);
 }

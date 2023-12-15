@@ -20,6 +20,12 @@ public class GlobalExceptionsHandler {
         return new ResponseEntity<>(new CustomResponse<>("Competition with this date already exists", null),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CompetitionRegistrationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<CustomResponse<CompetitionDTO, String>> handleCompetitionNoLongerAcceptsRegistrationException(CompetitionAlreadyExistsException ex){
+        return new ResponseEntity<>(new CustomResponse<>(ex.getMessage(), null),HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<CustomResponse<CompetitionDTO, String>> handleException(Exception ex) {
@@ -41,5 +47,11 @@ public class GlobalExceptionsHandler {
         CustomResponse<Object, String> response = new CustomResponse<>(errorMsg.toString(), null);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler(CannotStoreLevelException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleLevelStorageException(CannotStoreLevelException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

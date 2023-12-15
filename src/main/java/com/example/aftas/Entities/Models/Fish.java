@@ -9,12 +9,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor @AllArgsConstructor @Setter @Getter
 public class Fish {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String name;
     private Double averageWeight;
 
     @OneToMany(mappedBy = "fish")
-    Set<Hunting> huntings;
+    private Set<Hunting> huntings;
 
     @ManyToOne @JoinColumn(name = "level_id")
     private Level level;
