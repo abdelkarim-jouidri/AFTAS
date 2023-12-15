@@ -6,22 +6,26 @@ import com.example.aftas.Entities.DTOs.Response.CustomResponse;
 import com.example.aftas.Enums.Status;
 import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
 import com.example.aftas.Repositories.CompetitionRepository;
+import com.example.aftas.Services.CompetitionService;
 import com.example.aftas.Services.Implementations.CompetitionServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.concurrent.CompletionService;
 
 @RestController
 @RequestMapping("api/competitions/")
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class CompetitionController {
-    private final CompetitionServiceImpl competitionService;
+    @Qualifier("competitionServiceImpl")
+    private final CompetitionService competitionService;
     private final CompetitionRepository competitionRepository;
 
     @PostMapping("create")
@@ -47,7 +51,7 @@ public class CompetitionController {
     @GetMapping("/all")
     public ResponseEntity<CustomResponse<List<CompetitionDTO>, String>> fetchAll(){
         try {
-            return new ResponseEntity<>(new CustomResponse<>("data", competitionService.findAll()), HttpStatus.OK);
+            return new ResponseEntity<>(new CustomResponse<>("All Competitions", competitionService.findAll()), HttpStatus.OK);
         }catch (Exception ex){
             throw ex;
         }
@@ -55,10 +59,14 @@ public class CompetitionController {
 
     @GetMapping("/all/{status}")
     public ResponseEntity<CustomResponse<List<CompetitionDTO>, String>> getCompetitionsByStatus(@PathVariable Status status){
-        String msg = "Filtered Competitions by " + status.toString();
-        List<CompetitionDTO> data = competitionService.filterByStatus(status);
-        CustomResponse<List<CompetitionDTO>, String> response = new CustomResponse<>(msg, data);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        try{
+            String msg = "Filtered Competitions by " + status.toString();
+            List<CompetitionDTO> data = competitionService.filterByStatus(status);
+            CustomResponse<List<CompetitionDTO>, String> response = new CustomResponse<>(msg, data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception ex){
+            throw ex;
+        }
     }
 
 }
