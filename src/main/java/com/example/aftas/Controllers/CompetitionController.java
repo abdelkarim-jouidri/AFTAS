@@ -3,6 +3,7 @@ package com.example.aftas.Controllers;
 import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
 import com.example.aftas.Entities.DTOs.Competition.CreateCompetitionDTO;
 import com.example.aftas.Entities.DTOs.Response.CustomResponse;
+import com.example.aftas.Enums.Status;
 import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
 import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Services.Implementations.CompetitionServiceImpl;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/competitions/")
@@ -42,9 +44,21 @@ public class CompetitionController {
 
     }
 
-    @GetMapping("/exists")
-    public ResponseEntity<String> checkIfCompetitionExists(@RequestParam Date date){
-        return new ResponseEntity<>(String.valueOf(competitionRepository.existsByDate(date)), HttpStatus.OK);
+    @GetMapping("/all")
+    public ResponseEntity<CustomResponse<List<CompetitionDTO>, String>> fetchAll(){
+        try {
+            return new ResponseEntity<>(new CustomResponse<>("data", competitionService.findAll()), HttpStatus.OK);
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @GetMapping("/all/{status}")
+    public ResponseEntity<CustomResponse<List<CompetitionDTO>, String>> getCompetitionsByStatus(@PathVariable Status status){
+        String msg = "Filtered Competitions by " + status.toString();
+        List<CompetitionDTO> data = competitionService.filterByStatus(status);
+        CustomResponse<List<CompetitionDTO>, String> response = new CustomResponse<>(msg, data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
