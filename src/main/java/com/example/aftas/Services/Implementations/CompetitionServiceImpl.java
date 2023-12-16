@@ -14,12 +14,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("competitionServiceImpl")
@@ -79,5 +83,30 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public CompetitionDTO findCompetitionByCode(String code) {
         return modelMapper.map(competitionRepository.findCompetitionByCode(code), CompetitionDTO.class);
+    }
+
+    @Override
+    public boolean isCompetitionOngoing(Competition competition) {
+            LocalTime startTime = competition.getStartTime().toLocalTime();
+            LocalTime endTime = competition.getEndTime().toLocalTime();
+            LocalTime currentTime = LocalTime.now();
+            LocalDate currentDate = LocalDate.now();
+            LocalDate date = competition.getDate().toLocalDate();
+            return date.equals(currentDate) &&
+                    (currentTime.equals(startTime) || (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)));
+    }
+
+    @Override
+    public boolean isCompetitionExpired(Competition competition){
+        LocalDate competitonDate = competition.getDate().toLocalDate();
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.isAfter(competitonDate);
+    }
+
+    @Override
+    public boolean isCompetitionUpcoming(Competition competition){
+        LocalDate competitonDate = competition.getDate().toLocalDate();
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.isBefore(competitonDate);
     }
 }

@@ -28,10 +28,7 @@ public class HuntingController {
             ViewHuntingDTO savedHunting = huntingService.saveHunting(huntingDTO);
             CustomResponse<ViewHuntingDTO, String> response = new CustomResponse<>("Hunting saved successfully", savedHunting);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }catch (CannotStoreHuntingException ex){
-            throw ex;
         }catch (Exception ex){
-            ex.printStackTrace();
             throw ex;
         }
     }

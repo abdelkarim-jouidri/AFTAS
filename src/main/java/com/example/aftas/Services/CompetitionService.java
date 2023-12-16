@@ -16,4 +16,7 @@ public interface CompetitionService {
     List<CompetitionDTO> filterByStatus(Status status);
     public boolean isRegistrationOpen(CompetitionDTO competitionDTO);
     public CompetitionDTO findCompetitionByCode(String code);
+    public boolean isCompetitionOngoing(Competition competition);
+    public boolean isCompetitionUpcoming(Competition competition);
+    public boolean isCompetitionExpired(Competition competition);
 }
