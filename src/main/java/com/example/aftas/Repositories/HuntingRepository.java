@@ -15,5 +15,5 @@ import java.util.Optional;
 @Repository
 
 public interface HuntingRepository extends JpaRepository<Hunting, Integer> {
-    Optional<Hunting> findByCompetitionCode(String code);
+    Optional<Hunting> findByCompetitionCodeAndMemberNumAndFishName(String code, Integer num, String name);
 }

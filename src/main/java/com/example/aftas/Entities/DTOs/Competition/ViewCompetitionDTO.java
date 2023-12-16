@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 @Setter @Getter
 @AllArgsConstructor @NoArgsConstructor
-public class CompetitionDTO {
+public class ViewCompetitionDTO {
     private String code;
     private Date date;
     private Time startTime;
@@ -19,6 +19,4 @@ public class CompetitionDTO {
     private int numberOfParticipants;
     private String location;
     private double amount;
-    private Set<RankingDTO> rankings;
-    private Set<HuntingDTO> huntings;
 }

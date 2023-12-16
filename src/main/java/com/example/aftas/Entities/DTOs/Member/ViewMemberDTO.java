@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberDTO {
+public class ViewMemberDTO {
     private Integer num;
     private String firstname;
     private String lastname;
@@ -20,6 +20,4 @@ public class MemberDTO {
     private String nationality;
     private IdentityDocumentType identityDocumentType;
     private String identityNumber;
-    private Set<ViewRankingDTO> rankings;
-    private Set<ViewHuntingDTO> huntings;
 }

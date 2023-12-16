@@ -3,12 +3,9 @@
     import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
     import com.example.aftas.Entities.DTOs.Fish.FishDTO;
     import com.example.aftas.Entities.DTOs.Member.MemberDTO;
-    import lombok.AllArgsConstructor;
-    import lombok.Builder;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
+    import lombok.*;
 
-    @Data
+    @Setter @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
