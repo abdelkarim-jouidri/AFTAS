@@ -9,4 +9,5 @@
     </changeSet>
     <include file="db/changelog/2023/12/13-01-changelog.xml"/>
     <include file="db/changelog/2023/12/15-01-changelog.xml"/>
+    <include file="db/changelog/2023/12/16-01-changelog.xml"/>
 </databaseChangeLog>

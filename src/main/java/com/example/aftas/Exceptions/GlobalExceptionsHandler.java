@@ -16,25 +16,25 @@ import java.util.List;
 public class GlobalExceptionsHandler {
     @ExceptionHandler(CompetitionAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<CustomResponse<CompetitionDTO, String>> handleCompetitionAlreadyExistsException(CompetitionAlreadyExistsException ex){
-        return new ResponseEntity<>(new CustomResponse<>("Competition with this date already exists", null),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleCompetitionAlreadyExistsException(CompetitionAlreadyExistsException ex){
+        return new ResponseEntity<>("Competition with this date already exists", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CompetitionRegistrationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<CustomResponse<CompetitionDTO, String>> handleCompetitionNoLongerAcceptsRegistrationException(CompetitionAlreadyExistsException ex){
-        return new ResponseEntity<>(new CustomResponse<>(ex.getMessage(), null),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleCompetitionNoLongerAcceptsRegistrationException(CompetitionAlreadyExistsException ex){
+        return new ResponseEntity<>("Internal Server Error: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<CustomResponse<CompetitionDTO, String>> handleException(Exception ex) {
-        return new ResponseEntity<>(new CustomResponse<>("Internal Server Error: " + ex.getMessage() , null), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String> handleException(Exception ex) {
+        return new ResponseEntity<>("Internal Server Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<CustomResponse<Object, String>> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         StringBuilder errorMsg = new StringBuilder("Validation error : ");
         for (FieldError fieldError : fieldErrors){
@@ -44,8 +44,7 @@ public class GlobalExceptionsHandler {
                     append(fieldError.getDefaultMessage()).
                     append(" ; ");
         }
-        CustomResponse<Object, String> response = new CustomResponse<>(errorMsg.toString(), null);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMsg.toString(), HttpStatus.BAD_REQUEST);
 
     }
 
