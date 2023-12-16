@@ -54,9 +54,9 @@ public class GlobalExceptionsHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(CannotStoreHuntingException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ResponseEntity<String> handleStoreHuntingException(CannotStoreHuntingException ex){
-//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(CannotStoreHuntingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleStoreHuntingException(CannotStoreHuntingException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

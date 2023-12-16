@@ -1,9 +1,7 @@
 package com.example.aftas.Services.Implementations;
 
-import com.example.aftas.Entities.DTOs.Ranking.CreateRankingDTO;
 import com.example.aftas.Entities.DTOs.Ranking.RankingDTO;
 import com.example.aftas.Entities.Models.Ranking;
-import com.example.aftas.Entities.Models.RankingKey;
 import com.example.aftas.Repositories.RankingRepository;
 import com.example.aftas.Services.RankingService;
 import lombok.RequiredArgsConstructor;

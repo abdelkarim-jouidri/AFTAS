@@ -19,7 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/huntings")
 @RequiredArgsConstructor
-//@RestControllerAdvice
+@RestControllerAdvice
 public class HuntingController {
     private final HuntingService huntingService;
     @PostMapping("/store")

@@ -4,8 +4,11 @@ import com.example.aftas.Entities.DTOs.Hunting.CreateHuntingDTO;
 import com.example.aftas.Entities.DTOs.Hunting.HuntingDTO;
 import com.example.aftas.Entities.DTOs.Hunting.ViewHuntingDTO;
 import com.example.aftas.Entities.Models.Hunting;
+import com.example.aftas.Entities.Models.Ranking;
+import com.example.aftas.Entities.Models.RankingKey;
 import com.example.aftas.Exceptions.CannotStoreHuntingException;
 import com.example.aftas.Repositories.HuntingRepository;
+import com.example.aftas.Repositories.RankingRepository;
 import com.example.aftas.Services.HuntingService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HuntingServiceImpl implements HuntingService {
     private final HuntingRepository huntingRepository;
+    private final RankingRepository rankingRepository;
     private final ModelMapper modelMapper;
     @Override
     public ViewHuntingDTO saveHunting(CreateHuntingDTO huntingDTO) {
@@ -31,7 +35,13 @@ public class HuntingServiceImpl implements HuntingService {
             if(canStoreHuntingRecord(hunting, caughtFishWeight)){
                 hunting.setNumberOfFishes(numberOfFishes + huntingDTO.getNumberOfFishes());
                 Hunting savedHunting = huntingRepository.save(hunting);
-                // problem with model mapper not mapping and throwing an exception
+                RankingKey key = new RankingKey(savedHunting.getMember().getNum(), savedHunting.getCompetition().getCode());
+                Optional<Ranking> associatedRanking = rankingRepository.findById(key);
+                if (associatedRanking.isPresent()){
+                    int score = savedHunting.getNumberOfFishes() * savedHunting.getFish().getLevel().getPoints();
+                    associatedRanking.get().setScore(score);
+                    rankingRepository.save(associatedRanking.get());
+                }
                 return modelMapper.map(savedHunting, ViewHuntingDTO.class);
             }else {
                  throw new CannotStoreHuntingException(hunting.getFish().getAverageWeight());
@@ -44,7 +54,6 @@ public class HuntingServiceImpl implements HuntingService {
 
     public boolean canStoreHuntingRecord(Hunting hunting, Double caughtFishWeight){
         Double averageWeight = hunting.getFish().getAverageWeight();
-        if(averageWeight <= caughtFishWeight) return true;
-        return false;
+        return averageWeight <= caughtFishWeight;
     }
 }
