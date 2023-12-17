@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 
 public interface RankingRepository extends JpaRepository<Ranking, RankingKey> {
+    Optional<Ranking> findRankingByCompetitionCode(String code);
 }
