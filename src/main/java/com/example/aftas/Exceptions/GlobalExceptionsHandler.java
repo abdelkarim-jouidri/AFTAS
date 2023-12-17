@@ -22,14 +22,14 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(CompetitionRegistrationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleCompetitionNoLongerAcceptsRegistrationException(CompetitionAlreadyExistsException ex){
-        return new ResponseEntity<>("Internal Server Error: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleCompetitionNoLongerAcceptsRegistrationException(CompetitionRegistrationException ex){
+        return new ResponseEntity<>( ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> handleException(Exception ex) {
-        return new ResponseEntity<>("Internal Server Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>( ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -85,6 +85,12 @@ public class GlobalExceptionsHandler {
     @ExceptionHandler(MemberIsNotRegisteredForCompetitionException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleMemberIsNotRegisteredForCompetitionException(MemberIsNotRegisteredForCompetitionException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MemberAlreadyRegisteredForCompetitionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleMemberAlreadyRegisteredForCompetitionException(MemberAlreadyRegisteredForCompetitionException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

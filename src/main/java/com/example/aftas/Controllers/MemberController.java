@@ -55,8 +55,6 @@ public class MemberController {
             RankingDTO registeredRankingDTO = memberService.registerMemberForCompetition(memberNum, competitionCode);
             CustomResponse<RankingDTO, String> response = new CustomResponse<>("Member successfully registered for the competition", registeredRankingDTO);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (CompetitionRegistrationException ex) {
-            throw ex;
         } catch (Exception ex) {
             throw ex;
         }

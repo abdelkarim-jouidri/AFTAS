@@ -57,10 +57,14 @@ public class RankingServiceImpl implements RankingService {
             throw new NoSuchElementException("No such competition with code : "+ code);
         }
         List<Ranking> rankings = optionalCompetition.get().getRankings();
+        System.out.println(rankings);
         Collections.sort(rankings, Comparator.comparingInt(Ranking::getScore).reversed());
-        IntStream.range(0, rankings.size()).
-                forEach(index-> rankings.get(index).setRank(index+1));
-        return rankings.stream().map(ranking -> modelMapper.map(rankingRepository.save(ranking), ViewRankingDTO.class)).collect(Collectors.toList());
+        IntStream.range(0, rankings.size()).forEach(index-> rankings.get(index).setRank(index+1));
+        List<ViewRankingDTO> collect = rankings.
+                stream().
+                map(ranking -> modelMapper.map(rankingRepository.save(ranking), ViewRankingDTO.class)).
+                collect(Collectors.toList());
+        return collect;
     }
 
     @Override

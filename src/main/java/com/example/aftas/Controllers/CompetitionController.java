@@ -2,6 +2,7 @@ package com.example.aftas.Controllers;
 
 import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
 import com.example.aftas.Entities.DTOs.Competition.CreateCompetitionDTO;
+import com.example.aftas.Entities.DTOs.Competition.ViewCompetitionDTO;
 import com.example.aftas.Entities.DTOs.Response.CustomResponse;
 import com.example.aftas.Enums.Status;
 import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
@@ -9,6 +10,7 @@ import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Services.CompetitionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +46,17 @@ public class CompetitionController {
 
     }
 
+
+
     @GetMapping("/all")
-    public ResponseEntity<CustomResponse<List<CompetitionDTO>, String>> fetchAll(){
+    public ResponseEntity<CustomResponse<List<ViewCompetitionDTO>, String>> fetchAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
         try {
-            return new ResponseEntity<>(new CustomResponse<>("All Competitions", competitionService.findAll()), HttpStatus.OK);
-        }catch (Exception ex){
+            List<ViewCompetitionDTO> competitionsPage = competitionService.findAllPaginated(page, size);
+            return new ResponseEntity<>(new CustomResponse<>("Paginated Competitions", competitionsPage), HttpStatus.OK);
+        } catch (Exception ex) {
+            // Handle exceptions more gracefully in a production environment
             throw ex;
         }
     }

@@ -1,6 +1,7 @@
 package com.example.aftas.Services.Implementations;
 
 import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
+import com.example.aftas.Entities.DTOs.Competition.ViewCompetitionDTO;
 import com.example.aftas.Entities.DTOs.Member.CreateMemberDTO;
 import com.example.aftas.Entities.DTOs.Member.MemberDTO;
 import com.example.aftas.Entities.DTOs.Ranking.CreateRankingDTO;
@@ -10,7 +11,10 @@ import com.example.aftas.Entities.Models.Member;
 import com.example.aftas.Entities.Models.Ranking;
 import com.example.aftas.Entities.Models.RankingKey;
 import com.example.aftas.Exceptions.CompetitionRegistrationException;
+import com.example.aftas.Exceptions.MemberAlreadyRegisteredForCompetitionException;
+import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Repositories.MemberRepository;
+import com.example.aftas.Repositories.RankingRepository;
 import com.example.aftas.Services.CompetitionService;
 import com.example.aftas.Services.MemberService;
 import com.example.aftas.Services.RankingService;
@@ -18,6 +22,8 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("memberServiceImpl")
@@ -25,6 +31,8 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final CompetitionService competitionService;
+    private final CompetitionRepository competitionRepository;
+    private final RankingRepository rankingRepository;
     private final RankingService rankingService;
     private final ModelMapper modelMapper;
     @Override
@@ -43,13 +51,21 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public RankingDTO registerMemberForCompetition(Integer memberNum, String competitionCode) {
-        CompetitionDTO competitionByCode = competitionService.findCompetitionByCode(competitionCode);
-        if(!competitionService.isRegistrationOpen(competitionByCode)){
+        Optional<Competition> optionalCompetition = competitionRepository.findById(competitionCode);
+        if (optionalCompetition.isEmpty()) throw new NoSuchElementException("No such competition by this code : "+competitionCode);
+        Competition competition = optionalCompetition.get();
+        if(!competitionService.isRegistrationOpenForMemberService(competition)){
             throw new CompetitionRegistrationException("Registration is no longer allowed for this competition.");
         }
-        RankingKey rankingKey = RankingKey.builder().num(memberNum).code(competitionCode).build();
-        RankingDTO builtRanking = RankingDTO.builder().id(rankingKey).build();
 
-        return modelMapper.map(rankingService.saveRanking(builtRanking), RankingDTO.class);
+        RankingKey rankingKey = RankingKey.builder().num(memberNum).code(competitionCode).build();
+        if(rankingRepository.findById(rankingKey).isPresent()) {
+            throw new MemberAlreadyRegisteredForCompetitionException();
+        }
+        RankingDTO builtRanking = RankingDTO.builder().id(rankingKey).build();
+        RankingDTO map = modelMapper.map(rankingService.saveRanking(builtRanking), RankingDTO.class);
+        return map;
     }
+
+
 }

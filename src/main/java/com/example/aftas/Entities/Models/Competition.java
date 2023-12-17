@@ -6,7 +6,6 @@ import lombok.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Setter @Getter

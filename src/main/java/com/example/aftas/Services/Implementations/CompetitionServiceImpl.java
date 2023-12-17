@@ -2,6 +2,7 @@ package com.example.aftas.Services.Implementations;
 
 import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
 import com.example.aftas.Entities.DTOs.Competition.CreateCompetitionDTO;
+import com.example.aftas.Entities.DTOs.Competition.ViewCompetitionDTO;
 import com.example.aftas.Entities.Models.Competition;
 import com.example.aftas.Enums.Status;
 import com.example.aftas.Exceptions.CompetitionAlreadyExistsException;
@@ -10,6 +11,9 @@ import com.example.aftas.Services.CompetitionService;
 import com.example.aftas.Utils.CompetitionCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("competitionServiceImpl")
@@ -108,5 +109,29 @@ public class CompetitionServiceImpl implements CompetitionService {
         LocalDate competitonDate = competition.getDate().toLocalDate();
         LocalDate currentDate = LocalDate.now();
         return currentDate.isBefore(competitonDate);
+    }
+
+
+    @Override
+    public boolean isRegistrationOpenForMemberService(Competition competition) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime competitionStartDateTime = LocalDateTime.of(
+                competition.getDate().toLocalDate(),
+                competition.getStartTime().toLocalTime()
+        );
+
+        long hoursUntilStart = ChronoUnit.HOURS.between(currentDateTime, competitionStartDateTime);
+
+        return hoursUntilStart > 24;
+    }
+
+    @Override
+    public List<ViewCompetitionDTO> findAllPaginated(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.asc("date")));
+        return competitionRepository.
+                findAll(pageRequest).
+                stream().
+                map(competition -> modelMapper.map(competition, ViewCompetitionDTO.class)).
+                collect(Collectors.toList());
     }
 }
