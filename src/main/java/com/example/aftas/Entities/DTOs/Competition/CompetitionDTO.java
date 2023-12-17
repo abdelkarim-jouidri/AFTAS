@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -19,6 +20,6 @@ public class CompetitionDTO {
     private int numberOfParticipants;
     private String location;
     private double amount;
-    private Set<RankingDTO> rankings;
-    private Set<HuntingDTO> huntings;
+    private List<RankingDTO> rankings;
+    private List<HuntingDTO> huntings;
 }

@@ -13,4 +13,5 @@ public interface RankingService {
     RankingDTO saveRanking(RankingDTO rankingDTO);
     Ranking updateScore(Hunting hunting);
     List<ViewRankingDTO> calculateResult(String code);
+    List<ViewRankingDTO> calculatePodium(String code);
 }

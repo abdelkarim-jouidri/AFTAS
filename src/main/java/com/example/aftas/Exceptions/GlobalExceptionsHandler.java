@@ -29,7 +29,7 @@ public class GlobalExceptionsHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> handleException(Exception ex) {
-        return new ResponseEntity<>("test Internal Server Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Internal Server Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -67,13 +67,24 @@ public class GlobalExceptionsHandler {
     }
     @ExceptionHandler(CompetitionHasExpiredException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleStoreHuntingException(CompetitionHasExpiredException ex){
+    public ResponseEntity<String> handleCompetitionHasExpiredException(CompetitionHasExpiredException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CompetitionHasNotStartedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleStoreHuntingException(CompetitionHasNotStartedException ex){
+    public ResponseEntity<String> handleCompetitionHasNotStartedException(CompetitionHasNotStartedException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(NonSufficientNumberOfParticipantsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleNonSufficientNumberOfParticipantsException(NonSufficientNumberOfParticipantsException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MemberIsNotRegisteredForCompetitionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleMemberIsNotRegisteredForCompetitionException(MemberIsNotRegisteredForCompetitionException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

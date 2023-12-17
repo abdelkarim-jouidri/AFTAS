@@ -5,10 +5,8 @@ import com.example.aftas.Entities.DTOs.Hunting.ViewHuntingDTO;
 import com.example.aftas.Entities.Models.Competition;
 import com.example.aftas.Entities.Models.Hunting;
 import com.example.aftas.Entities.Models.Ranking;
-import com.example.aftas.Exceptions.CannotStoreHuntingException;
-import com.example.aftas.Exceptions.CompetitionHasExpiredException;
-import com.example.aftas.Exceptions.CompetitionHasNotStartedException;
-import com.example.aftas.Exceptions.CompetitionIClosedException;
+import com.example.aftas.Entities.Models.RankingKey;
+import com.example.aftas.Exceptions.*;
 import com.example.aftas.Repositories.*;
 import com.example.aftas.Services.CompetitionService;
 import com.example.aftas.Services.HuntingService;
@@ -29,6 +27,7 @@ public class HuntingServiceImpl implements HuntingService {
     private final MemberRepository memberRepository;
     private final FishRepository fishRepository;
     private final CompetitionRepository competitionRepository;
+    private final RankingRepository rankingRepository;
     @Qualifier("competitionServiceImpl")
     private final CompetitionService competitionService;
     private final ModelMapper modelMapper;
@@ -56,6 +55,10 @@ public class HuntingServiceImpl implements HuntingService {
             if ( !competitionService.isCompetitionOngoing(competition)){
                 throw new CompetitionIClosedException(competition.getDate());
             }
+        }
+        RankingKey key = new RankingKey(num, code);
+        if(rankingRepository.findById(key).isEmpty()){
+            throw new MemberIsNotRegisteredForCompetitionException();
         }
         Optional<Hunting> optionalExistingHunting = huntingRepository.findByCompetitionCodeAndMemberNumAndFishName(code, num, name);
         if (optionalExistingHunting.isPresent()){

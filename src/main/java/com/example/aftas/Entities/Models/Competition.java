@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,8 +23,8 @@ public class Competition {
     private Double amount;
 
     @OneToMany(mappedBy = "competition")
-    private Set<Ranking> rankings;
+    private List<Ranking> rankings;
 
     @OneToMany(mappedBy = "competition")
-    private Set<Hunting> huntings;
+    private List<Hunting> huntings;
 }

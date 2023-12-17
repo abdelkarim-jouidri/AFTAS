@@ -25,6 +25,18 @@ public class RankingController {
             CustomResponse<List<ViewRankingDTO> , String> response = new CustomResponse<>("result of the competition", viewRankingDTO);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception ex){
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
+    @GetMapping("/{competitionCode}/podium")
+    public ResponseEntity<CustomResponse<List<ViewRankingDTO>, String>> showPodium(@PathVariable String competitionCode){
+        try{
+            List<ViewRankingDTO> viewRankingDTO = rankingService.calculatePodium(competitionCode);
+            CustomResponse<List<ViewRankingDTO> , String> response = new CustomResponse<>("Podium of the competition", viewRankingDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception ex){
             throw ex;
         }
     }
