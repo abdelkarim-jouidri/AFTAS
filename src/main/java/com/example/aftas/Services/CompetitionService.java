@@ -23,5 +23,5 @@ public interface CompetitionService {
     boolean isCompetitionExpired(Competition competition);
     boolean isRegistrationOpenForMemberService(Competition competition);
 
-    List<ViewCompetitionDTO> findAllPaginated(int page, int size);
+    Page<ViewCompetitionDTO> findAllPaginated(int page, int size);
 }

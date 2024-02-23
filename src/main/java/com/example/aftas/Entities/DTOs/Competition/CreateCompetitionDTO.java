@@ -17,6 +17,8 @@ public class CreateCompetitionDTO {
     @Future(message = "input date shouldn't be before today's date")
     private Date date;
 
+
+
     @NotNull(message = "Start time is required")
     private Time startTime;
 

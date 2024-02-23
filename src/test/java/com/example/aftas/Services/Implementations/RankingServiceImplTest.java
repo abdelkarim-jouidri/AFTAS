@@ -16,9 +16,12 @@ import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RankingServiceImplTest {
@@ -46,10 +49,10 @@ class RankingServiceImplTest {
         rankings.add(Ranking.builder().id(key1).score(100).build());
         rankings.add(Ranking.builder().id(key2).score(200).build());
         mockCompetition.setRankings(rankings);
-        Mockito.when(competitionRepository.findById(competitionCode)).thenReturn(Optional.of(mockCompetition));
+        when(competitionRepository.findById(competitionCode)).thenReturn(Optional.of(mockCompetition));
 
-        // Mocking behavior of the model mapper here is indispensable
-        Mockito.when(modelMapper.map(Mockito.any(), Mockito.eq(ViewRankingDTO.class)))
+
+        when(modelMapper.map(Mockito.any(), Mockito.eq(ViewRankingDTO.class)))
                 .thenAnswer(invocation -> {
                     Ranking ranking = invocation.getArgument(0);
                     ViewRankingDTO dto = new ViewRankingDTO();
@@ -59,7 +62,7 @@ class RankingServiceImplTest {
                     return dto;
                 });
 
-        Mockito.when(rankingRepository.save(Mockito.any(Ranking.class)))
+        when(rankingRepository.save(Mockito.any(Ranking.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // Test
@@ -71,5 +74,19 @@ class RankingServiceImplTest {
         assertEquals(2, result.get(1).getRank());
         assertEquals(200, result.get(0).getScore());
         assertEquals(100, result.get(1).getScore());
+    }
+
+
+    @Test
+    void calculateResult_InvalidCompetitionCode() {
+        String invalidCompetitionCode = "invalidCode";
+        when(competitionRepository.findById(invalidCompetitionCode)).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            rankingService.calculateResult(invalidCompetitionCode);
+        });
+
+        String expectedErrorMessage = "No such competition with code : " + invalidCompetitionCode;
+        assertEquals(expectedErrorMessage, exception.getMessage());
     }
 }

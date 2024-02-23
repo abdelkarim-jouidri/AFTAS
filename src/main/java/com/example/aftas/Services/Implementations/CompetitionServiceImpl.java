@@ -126,12 +126,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public List<ViewCompetitionDTO> findAllPaginated(int page, int size) {
+    public Page<ViewCompetitionDTO> findAllPaginated(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.asc("date")));
         return competitionRepository.
-                findAll(pageRequest).
-                stream().
-                map(competition -> modelMapper.map(competition, ViewCompetitionDTO.class)).
-                collect(Collectors.toList());
+                findAll(pageRequest).map(competition -> modelMapper.map(competition, ViewCompetitionDTO.class));
     }
 }

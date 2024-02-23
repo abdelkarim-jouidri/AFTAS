@@ -2,6 +2,7 @@ package com.example.aftas.Controllers;
 
 import com.example.aftas.Entities.DTOs.Member.CreateMemberDTO;
 import com.example.aftas.Entities.DTOs.Member.MemberDTO;
+import com.example.aftas.Entities.DTOs.Member.ViewMemberDTO;
 import com.example.aftas.Entities.DTOs.Ranking.RankingDTO;
 import com.example.aftas.Entities.DTOs.Response.CustomResponse;
 import com.example.aftas.Exceptions.CompetitionRegistrationException;
@@ -27,10 +28,10 @@ public class MemberController {
     private final RankingService rankingService;
 
     @GetMapping("/all")
-    public ResponseEntity<CustomResponse<List<MemberDTO>, String>> getAllMembers(){
+    public ResponseEntity<CustomResponse<List<ViewMemberDTO>, String>> getAllMembers(){
         try{
-            List<MemberDTO> allMembers = memberService.findAll();
-            CustomResponse<List<MemberDTO>, String> response = new CustomResponse<>("All members", allMembers);
+            List<ViewMemberDTO> allMembers = memberService.findAll();
+            CustomResponse<List<ViewMemberDTO>, String> response = new CustomResponse<>("All members", allMembers);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception ex){
             throw ex;

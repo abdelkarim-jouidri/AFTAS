@@ -1,6 +1,7 @@
 package com.example.aftas.Entities.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.sql.Date;
@@ -12,6 +13,7 @@ import java.util.List;
 @Builder
 public class Competition {
     @Id
+    @Pattern(regexp = "^[aA-zZ]{3}\\-[0-9]{2}\\-[0-9]{2}\\-[0-9]{2}$", flags = Pattern.Flag.UNICODE_CASE)
     private String code;
 
     private Date date;

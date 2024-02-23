@@ -10,8 +10,8 @@ import com.example.aftas.Repositories.CompetitionRepository;
 import com.example.aftas.Services.CompetitionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping("api/competitions/")
 @RequiredArgsConstructor
 @RestControllerAdvice
+
 public class CompetitionController {
     @Qualifier("competitionServiceImpl")
     private final CompetitionService competitionService;
@@ -49,14 +50,13 @@ public class CompetitionController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<CustomResponse<List<ViewCompetitionDTO>, String>> fetchAll(
+    public ResponseEntity<CustomResponse<Page<ViewCompetitionDTO>, String>> fetchAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "4") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         try {
-            List<ViewCompetitionDTO> competitionsPage = competitionService.findAllPaginated(page, size);
+            Page<ViewCompetitionDTO> competitionsPage = competitionService.findAllPaginated(page, size);
             return new ResponseEntity<>(new CustomResponse<>("Paginated Competitions", competitionsPage), HttpStatus.OK);
         } catch (Exception ex) {
-            // Handle exceptions more gracefully in a production environment
             throw ex;
         }
     }

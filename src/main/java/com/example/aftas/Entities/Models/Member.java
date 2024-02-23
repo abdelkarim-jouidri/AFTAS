@@ -1,6 +1,7 @@
 package com.example.aftas.Entities.Models;
 
 import com.example.aftas.Enums.IdentityDocumentType;
+import com.example.aftas.Enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +27,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private Set<Hunting> huntings;
+
+    private Role role;
 }

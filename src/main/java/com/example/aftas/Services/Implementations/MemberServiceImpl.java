@@ -4,6 +4,7 @@ import com.example.aftas.Entities.DTOs.Competition.CompetitionDTO;
 import com.example.aftas.Entities.DTOs.Competition.ViewCompetitionDTO;
 import com.example.aftas.Entities.DTOs.Member.CreateMemberDTO;
 import com.example.aftas.Entities.DTOs.Member.MemberDTO;
+import com.example.aftas.Entities.DTOs.Member.ViewMemberDTO;
 import com.example.aftas.Entities.DTOs.Ranking.CreateRankingDTO;
 import com.example.aftas.Entities.DTOs.Ranking.RankingDTO;
 import com.example.aftas.Entities.Models.Competition;
@@ -36,11 +37,11 @@ public class MemberServiceImpl implements MemberService {
     private final RankingService rankingService;
     private final ModelMapper modelMapper;
     @Override
-    public List<MemberDTO> findAll() {
+    public List<ViewMemberDTO> findAll() {
         return memberRepository.
                 findAll().
                 stream().
-                map(member -> modelMapper.map(member, MemberDTO.class)).collect(Collectors.toList());
+                map(member -> modelMapper.map(member, ViewMemberDTO.class)).collect(Collectors.toList());
     }
 
     @Override
