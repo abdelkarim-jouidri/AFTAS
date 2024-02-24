@@ -3,6 +3,7 @@ package com.example.aftas.Entities.DTOs.Member;
 import com.example.aftas.Entities.DTOs.Hunting.ViewHuntingDTO;
 import com.example.aftas.Entities.DTOs.Ranking.ViewRankingDTO;
 import com.example.aftas.Enums.IdentityDocumentType;
+import com.example.aftas.Enums.Role;
 import lombok.*;
 
 import java.sql.Date;
@@ -20,4 +21,7 @@ public class ViewMemberDTO {
     private String nationality;
     private IdentityDocumentType identityDocumentType;
     private String identityNumber;
+    private String email;
+    private Role role;
+
 }

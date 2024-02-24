@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -39,6 +40,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     private final RankingRepository rankingRepository;
     private final RankingService rankingService;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public List<ViewMemberDTO> findAll() {
         return memberRepository.
@@ -49,6 +51,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     public MemberDTO createMember(CreateMemberDTO memberDTO) {
+        memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
         Member member = modelMapper.map(memberDTO, Member.class);
         return modelMapper.map(memberRepository.save(member), MemberDTO.class);
     }

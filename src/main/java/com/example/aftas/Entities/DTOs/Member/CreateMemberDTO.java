@@ -20,7 +20,8 @@ public class CreateMemberDTO {
 
     @NotBlank(message = "Last name is required")
     private String lastname;
-
+    @NotBlank(message = "Last name is required")
+    private String email;
     @NotNull(message = "Joining date cannot be null")
     private Date joiningDate;
 
@@ -32,4 +33,10 @@ public class CreateMemberDTO {
 
     @NotBlank(message = "Identity number is required")
     private String identityNumber;
+
+    @NotBlank(message = "Password is required")
+    private String password;
+    @NotBlank(message = "role is required")
+    private String role;
+
 }
