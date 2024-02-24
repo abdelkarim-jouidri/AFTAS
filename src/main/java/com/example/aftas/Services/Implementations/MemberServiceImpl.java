@@ -21,6 +21,9 @@ import com.example.aftas.Services.MemberService;
 import com.example.aftas.Services.RankingService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Service("memberServiceImpl")
 @AllArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService, UserDetailsService {
     private final MemberRepository memberRepository;
     private final CompetitionService competitionService;
     private final CompetitionRepository competitionRepository;
@@ -69,4 +72,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return memberRepository.findMemberByEmail(email).get();
+    }
 }
