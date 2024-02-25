@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -35,9 +36,15 @@ public class SecurityConfiguration {
         httpSecurity.
                 csrf(c->c.disable()).
                 sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
-                authorizeHttpRequests(ar->ar.anyRequest().authenticated()).
+                authorizeHttpRequests(ar->
+                        ar.anyRequest().authenticated().
+                        requestMatchers("/auth/**").permitAll()
+                ).
+                oauth2ResourceServer(oauth2->oauth2.jwt(Customizer.withDefaults())).
                 httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
     }
+
+
 }
