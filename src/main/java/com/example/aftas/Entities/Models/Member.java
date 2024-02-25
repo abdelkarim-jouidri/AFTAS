@@ -2,6 +2,7 @@ package com.example.aftas.Entities.Models;
 
 import com.example.aftas.Enums.IdentityDocumentType;
 import com.example.aftas.Enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,8 @@ public class Member implements UserDetails {
     private IdentityDocumentType identityDocumentType;
     private String identityNumber;
     private String password;
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Ranking> rankings;
 
     @OneToMany(mappedBy = "member")
@@ -45,12 +47,12 @@ public class Member implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return email;
     }
 
     @Override

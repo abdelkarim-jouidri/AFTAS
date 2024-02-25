@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -35,11 +36,14 @@ public class SecurityConfiguration {
         httpSecurity.
                 csrf(c->c.disable()).
                 sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
-                authorizeHttpRequests((authz)->authz.
-                        requestMatchers("/api/auth/**").
-                        permitAll().
-                        anyRequest().
-                        authenticated()).
+                authorizeHttpRequests((authz)-> {
+                    authz.
+                            requestMatchers("/api/auth/**").
+                            permitAll().
+                            requestMatchers(HttpMethod.POST,"/api/members/create").hasAuthority("MANAGER").
+                            anyRequest().
+                            authenticated();
+                }).
                 authenticationProvider(authenticationProvider).
                 addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
