@@ -27,9 +27,11 @@ public class JwtServiceImpl implements JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
+        System.out.println(userDetails.getAuthorities());
         String compact = Jwts.builder().
                 setClaims(extraClaims).
                 setSubject(userDetails.getUsername()).
+                claim("aut",userDetails.getAuthorities()).
                 setIssuedAt(new Date(System.currentTimeMillis())).
                 setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)).
                 signWith(getSignKey(), SignatureAlgorithm.HS256).
