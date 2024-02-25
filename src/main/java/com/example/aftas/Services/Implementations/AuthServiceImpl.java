@@ -2,7 +2,7 @@ package com.example.aftas.Services.Implementations;
 
 import com.example.aftas.Entities.DTOs.Member.CreateMemberDTO;
 import com.example.aftas.Entities.DTOs.Member.ViewMemberDTO;
-import com.example.aftas.Entities.DTOs.Request.LoginRequest;
+import com.example.aftas.Entities.DTOs.Request.AuthenticationRequest;
 import com.example.aftas.Repositories.MemberRepository;
 import com.example.aftas.Services.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginRequest request) {
+    public String login(AuthenticationRequest request) {
 
         return null;
     }
