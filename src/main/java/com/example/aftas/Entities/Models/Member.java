@@ -29,6 +29,9 @@ public class Member implements UserDetails {
     private IdentityDocumentType identityDocumentType;
     private String identityNumber;
     private String password;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean isAccountActivated;
+
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Ranking> rankings;

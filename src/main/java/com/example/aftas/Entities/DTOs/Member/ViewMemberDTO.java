@@ -23,5 +23,6 @@ public class ViewMemberDTO {
     private String identityNumber;
     private String email;
     private Role role;
+    private boolean isAccountActivated;
 
 }
