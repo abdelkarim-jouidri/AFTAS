@@ -9,6 +9,7 @@ import com.example.aftas.Repositories.MemberRepository;
 import com.example.aftas.Services.AuthenticationService;
 import com.example.aftas.Services.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +55,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Member member = memberRepository.
                 findMemberByEmail(request.getEmail()).
                 orElseThrow(() -> new UsernameNotFoundException("Wrong Credentials"));
+        if(!member.isAccountActivated()){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Account Not Activated");
+        }
         var jwt = jwtService.generateToken(member);
         return AuthenticationResponse.
                 builder().

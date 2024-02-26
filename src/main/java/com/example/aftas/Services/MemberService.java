@@ -13,4 +13,5 @@ public interface MemberService {
     List<ViewMemberDTO> findAll();
     MemberDTO createMember(CreateMemberDTO memberDTO);
     RankingDTO registerMemberForCompetition(Integer memberNum, String competitionCode);
+    String activateAccount(Integer num);
 }

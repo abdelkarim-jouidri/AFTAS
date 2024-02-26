@@ -60,4 +60,10 @@ public class MemberController {
             throw ex;
         }
     }
+
+    @PostMapping("/activate/{num}")
+    public ResponseEntity<String> activate(@PathVariable Integer num){
+        String output = memberService.activateAccount(num);
+        return new ResponseEntity<>(output, HttpStatus.CREATED);
+    }
 }

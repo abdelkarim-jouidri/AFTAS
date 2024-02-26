@@ -75,6 +75,15 @@ public class MemberServiceImpl implements MemberService {
         return map;
     }
 
+    @Override
+    public String activateAccount(Integer num) {
+        Member member = memberRepository.
+                findById(num).
+                orElseThrow(() -> new UsernameNotFoundException("No such user with this Id"));
+        member.setAccountActivated(true);
+        memberRepository.save(member);
+        return "Successfully activated";
+    }
 
 
 }
